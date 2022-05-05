@@ -30,12 +30,8 @@ def get_html(url):
                     re_dir["date"] = div.xpath('./div/header[@class="main-hd"]/span[1]/text()')[0]
                 re_dir["page"] = div.xpath('./div//div[@class="main-bd"]/h2/a/text()')[0]
                 re_dir["href"] = div.xpath('./div/div[@class="main-bd"]/h2/a/@href')[0]
-                re_dir["useful_count"] = div.xpath('./div//div[@class="action"]/a[1]/span/text()')[0].replace(' ',
-                                                                                                              '').replace(
-                    '\n', '')
-                re_dir["no_useful_count"] = div.xpath('./div//div[@class="action"]/a[2]/span/text()')[0].replace(' ',
-                                                                                                                 '').replace(
-                    '\n', '')
+                re_dir["useful_count"] = div.xpath('./div//div[@class="action"]/a[1]/span/text()')[0].replace(' ','').replace('\n', '')
+                re_dir["no_useful_count"] = div.xpath('./div//div[@class="action"]/a[2]/span/text()')[0].replace(' ','').replace('\n', '')
                 re_dir["return"] = div.xpath('./div//div[@class="action"]/a[3]/text()')[0]
                 receives.append(re_dir)
         except:
@@ -60,9 +56,15 @@ def down_data(receives):
             count_pinglun+=1
     print("存储完成！",'='*80)
 
-
-
-
+    
+#  豆瓣影评：传入一个影评界面的url，将会自动爬取该电影的所有评论信息，并以字典形式每一行为一条影评信息保存在txt文件中
+     
+#  优化方向：
+#     1.完善url的传入，可以找到一个豆瓣接口，输入电影名称，就会自动生成其对应的url
+#     2.可以用tkinter制作一个简单的GUI，实现界面化操作
+#     3.对得到的影评信息进行可视化操作，从数据中获得价值，比如生成影评词云等
+#     4.代码自身也可优化，有些地方过于冗余，可改进使其更加优雅（其实就是自己懒）
+#     5.代码有几处报错，直接用try模糊处理了过去，并没有深究其原因，可改进
 
 
 if __name__ == '__main__':
