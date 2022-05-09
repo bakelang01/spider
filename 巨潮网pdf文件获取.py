@@ -128,7 +128,7 @@ def creat_ex(data):
         max_col = sheet.max_column
         sheet.delete_cols(idx=1,amount=max_col)
         sheet.append(['code','company','title','date'])
-        excel.save()
+        excel.save(exclname)
     for it in data:
         ax_list = []
         hr = []
