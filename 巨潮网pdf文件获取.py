@@ -113,11 +113,22 @@ def down_pdf(pdf_li):
         print(pdf['title']," 下载完毕",'*'*80)
 
 def creat_ex(data):
-    print("写入表格",'='*100)
+    print('='*100,"\n写入表格",)
+    global exclname
     all=[]
     href=[]
-    if not os.path.exists('base.xlsx') :
-        os.mkdir('base.xlsx')
+    if not os.path.exists(exclname):
+        excel = ex.Workbook()
+        sheet = excel.active
+        sheet.append(['code','company','title','date'])
+        excel.save(exclname)
+    else:
+        excel = ex.load_workbook(exclname)
+        sheet = excel.active
+        max_col = sheet.max_column
+        sheet.delete_cols(idx=1,amount=max_col)
+        sheet.append(['code','company','title','date'])
+        excel.save()
     for it in data:
         ax_list = []
         hr = []
@@ -130,8 +141,7 @@ def creat_ex(data):
         href.append(hr)
         all.append(ax_list)
 
-    global exclname
-    workbook = ex.load_workbook('base.xlsx')
+    workbook = ex.load_workbook(exclname)
     sheet = workbook.active
     for row,h in zip(all,href):
         sheet.append(row)
@@ -141,6 +151,7 @@ def creat_ex(data):
         sheet.cell(r,3).hyperlink =(h[1])
     workbook.save(exclname)
     print('写入完成')
+    print('='*100,'\n')
 
 
 
@@ -155,14 +166,15 @@ if __name__ == '__main__' :
     colum: "szse" >深沪京 "hke" > 港股  "third" > 三板  "fund" >基金  ""
     巨潮网：http://www.cninfo.com.cn/new/commonUrl/pageOfSearch?url=disclosure/list/search&lastPage=index
     '''
-    exclname = '年报_1.xlsx'
+    exclname = '1.xlsx'
     #拿到数据
-    totle_new = get_data(key='',page_number=100,date="2022-01-01~2022-05-07",start=1,year=True,colum='szse')
+    totle_new = get_data(key='',page_number=200,date="2022-01-01~2022-05-07",start=1,year=True,colum='szse')
     #简单的过滤数据
     useful_new=fenxidata(totle_new)
     #写入表格
     creat_ex(useful_new)
     #下载文件
-    down_pdf(useful_new)
-
-
+    b=input("是否下载文件（y/n）>>")
+    if b == 'y' :
+        down_pdf(useful_new)
+    print("运行完毕")
